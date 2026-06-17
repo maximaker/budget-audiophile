@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Budget Audiophile — A field guide to great sound for less</title>
+  <meta name="description" content="A curated, searchable database of the best-value audiophile gear: IEMs, headphones, DACs, amps, speakers and turntables — with ratings, reviews and where to buy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="shell">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a class="brand" href="#top">
+        <span class="mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M4 14a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <rect x="3" y="13" width="4.4" height="7.4" rx="2.2" stroke="currentColor" stroke-width="1.8"/>
+            <rect x="16.6" y="13" width="4.4" height="7.4" rx="2.2" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </span>
+        <span class="brand-name">The Budget <em>Audiophile</em><small>Field guide to great sound</small></span>
+      </a>
+      <nav class="hdr-nav">
+        <a href="#catalog">Catalog</a>
+        <a href="#method">How we rate</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false">
+        <svg class="ic-moon" width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <svg class="ic-sun" width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.5M12 19v2.5M21.5 12H19M5 12H2.5M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8M18.4 18.4l-1.8-1.8M7.4 7.4 5.6 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <div class="hdr-meta"><span class="dot"></span><b id="navCount">24</b>&nbsp;picks logged</div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="wrap hero-in">
+        <div class="hero-copy">
+          <span class="eyebrow">
+            <svg class="eq" width="16" height="14" viewBox="0 0 16 14" aria-hidden="true"><rect x="0" y="5" width="2.6" height="9" rx="1.3"/><rect x="4.5" y="1" width="2.6" height="13" rx="1.3"/><rect x="9" y="7" width="2.6" height="7" rx="1.3"/><rect x="13.4" y="3" width="2.6" height="11" rx="1.3"/></svg>
+            Independent · no sponsored picks
+          </span>
+          <h1>Hi-fi that <em>sounds</em> expensive.<br>Prices that aren't.</h1>
+          <p class="lede">A field guide to the gear that punches far above its price — quietly excellent brands, rated and reviewed, cross-checked against the community so you can buy once and listen for years.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#catalog">
+              Browse the catalog
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="#method">How we rate</a>
+          </div>
+          <dl class="hero-stats" id="heroStats"></dl>
+        </div>
+
+        <div class="hero-media">
+          <div class="hero-dots" id="heroDots" aria-hidden="true"></div>
+          <figure class="hero-photo">
+            <img src="assets/hero.jpg" alt="A pair of audiophile headphones resting on a minimal desk" />
+            <figcaption><span class="tick">●</span> NOW AUDITIONING</figcaption>
+          </figure>
+          <div class="float-chip chip-rating">
+            <span class="cr-stars">★★★★★</span>
+            <span><b>4.8</b> editor favourite</span>
+          </div>
+          <div class="float-chip chip-price"><span class="fc-k">FROM</span><span class="fc-v">$9</span></div>
+        </div>
+      </div>
+
+      <!-- soundwave divider -->
+      <div class="wave" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none" width="100%" height="44">
+          <path id="wavePath" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ===================== EDITOR'S PICKS ===================== -->
+    <section class="picks">
+      <div class="picks-dots" id="picksDots" aria-hidden="true"></div>
+      <div class="wrap picks-in">
+        <div class="picks-head">
+          <span class="kicker">Where to start</span>
+          <h2>Three ways in.</h2>
+          <p>New to better sound? These three cover the whole spread — from a pocket-money first buy to a keeper you'll never feel the need to upgrade.</p>
+        </div>
+        <div class="picks-grid" id="picksGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== CATALOG ===================== -->
+    <div class="wrap catalog-intro" id="catalog">
+      <div class="ci-title">
+        <span class="kicker">The catalogue</span>
+        <h2>Every pick, on the record.</h2>
+      </div>
+      <p class="ci-sub">Filtered live · sorted by ear &amp; by numbers</p>
+    </div>
+    <section class="wrap catalog">
+
+      <!-- faceted filter rail -->
+      <aside class="facets" id="facets" aria-label="Filters">
+        <button class="facet-toggle" id="facetToggle" aria-expanded="false" aria-controls="facetPanel">
+          <svg class="ft-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6.5h11M3 12h6M3 17.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="6.5" r="2.5" stroke="currentColor" stroke-width="2"/><circle cx="13" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="17.5" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+          <span class="ft-label">Filter</span>
+          <span class="ft-badge" id="facetBadge" hidden>0</span>
+          <svg class="ft-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="facet-panel" id="facetPanel" hidden>
+          <button class="reset" id="reset" hidden>Reset all</button>
+          <div class="facet-grp" id="facetCategory"><h3>Category</h3><div class="facet-body"></div></div>
+          <div class="facet-grp" id="facetType" hidden><h3>Type</h3><div class="facet-body"></div></div>
+          <div class="facet-grp" id="facetPrice"><h3>Price</h3><div class="facet-body"></div></div>
+          <div class="facet-grp" id="facetSound"><h3>Sound signature</h3><div class="facet-body chips"></div></div>
+          <div class="facet-grp" id="facetGenre"><h3>Best for music</h3><div class="facet-body chips"></div></div>
+        </div>
+      </aside>
+
+      <!-- results -->
+      <div class="results">
+        <div class="toolbar">
+          <label class="search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="search" type="search" placeholder="Search name, brand, signature…" autocomplete="off" />
+          </label>
+          <div class="select-wrap">
+            <select id="sort" aria-label="Sort by">
+              <option value="rating">Highest rated</option>
+              <option value="value">Best value</option>
+              <option value="price-asc">Price ↑</option>
+              <option value="price-desc">Price ↓</option>
+              <option value="name">A → Z</option>
+            </select>
+          </div>
+          <div class="view-toggle" role="group" aria-label="View">
+            <button data-view="gallery" class="active" aria-label="Gallery view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.6" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="1.6" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="1.6" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="1.6" stroke="currentColor" stroke-width="2"/></svg>
+              <span class="vt-label">Gallery</span>
+            </button>
+            <button data-view="list" aria-label="List view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="3.5" cy="6" r="1.5" fill="currentColor"/><circle cx="3.5" cy="12" r="1.5" fill="currentColor"/><circle cx="3.5" cy="18" r="1.5" fill="currentColor"/></svg>
+              <span class="vt-label">List</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="result-meta">
+          <span class="count" id="count"></span>
+          <span class="active-tags" id="activeTags"></span>
+        </div>
+
+        <div id="listing" class="listing"></div>
+      </div>
+    </section>
+
+    <!-- ===================== STARTER SYSTEMS ===================== -->
+    <section class="wrap systems">
+      <div class="systems-head">
+        <span class="kicker">Build a system</span>
+        <h2>Starter systems, ready to go.</h2>
+        <p>Proven budget pairings — a source and a transducer that sing together. Tap any piece for the full review.</p>
+      </div>
+      <div class="systems-grid" id="systemsGrid"></div>
+    </section>
+
+    <!-- ===================== METHOD / ABOUT ===================== -->
+    <section class="band" id="method">
+      <div class="wrap band-in">
+        <div class="band-copy">
+          <span class="eyebrow">
+            <svg class="eq" width="16" height="14" viewBox="0 0 16 14" aria-hidden="true"><rect x="0" y="3" width="2.6" height="11" rx="1.3"/><rect x="4.5" y="6" width="2.6" height="8" rx="1.3"/><rect x="9" y="1" width="2.6" height="13" rx="1.3"/><rect x="13.4" y="5" width="2.6" height="9" rx="1.3"/></svg>
+            Our method
+          </span>
+          <h2>Measured, then <em>lived with</em>.</h2>
+          <p>Every rating blends objective measurements — frequency response, distortion, output power — with weeks of real listening and the long memory of the wider community. We take no payment for placement. The only thing on sale here is honest advice.</p>
+        </div>
+        <div class="method-cards" id="about">
+          <article class="m-card">
+            <span class="m-num">01</span>
+            <h3>No sponsors decide the order</h3>
+            <p>Rankings owe nothing to affiliates. Retailer links are listed for convenience only, grouped by region so you can buy from someone you trust.</p>
+          </article>
+          <article class="m-card">
+            <span class="m-num">02</span>
+            <h3>Synergy matters</h3>
+            <p>Budget gear shines when paired well — a warm headphone with a clean amp, a neutral IEM with flexible EQ. Each review flags what to pair it with.</p>
+          </article>
+          <article class="m-card">
+            <span class="m-num">03</span>
+            <h3>Prices are honest estimates</h3>
+            <p>Street prices in USD, accurate to mid-2026 and prone to drift with coupons. Always double-check the current price before you buy.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <div class="foot-brand">
+        <a class="brand" href="#top">
+          <span class="mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 14a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="13" width="4.4" height="7.4" rx="2.2" stroke="currentColor" stroke-width="1.8"/><rect x="16.6" y="13" width="4.4" height="7.4" rx="2.2" stroke="currentColor" stroke-width="1.8"/></svg>
+          </span>
+          <span class="brand-name">The Budget <em>Audiophile</em></span>
+        </a>
+        <p class="foot-tagline">Tuned by <em>ear</em>. Checked by <em>numbers</em>.</p>
+        <p>A reader-supported field guide to affordable hi-fi. Imagery from manufacturers, retailers &amp; Unsplash; hand-drawn soundwave illustrations.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#catalog">Catalog</a>
+        <a href="#method">Method</a>
+        <a href="#about">About</a>
+      </div>
+      <p class="foot-note">Demo project · © 2026 The Budget Audiophile · built for the love of good sound</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===================== COMPARE TRAY ===================== -->
+<div class="compare-tray" id="compareTray" hidden>
+  <div class="wrap ct-in">
+    <span class="ct-label">Compare<span class="ct-hint">pick 2–3</span></span>
+    <div class="ct-items" id="ctItems"></div>
+    <div class="ct-actions">
+      <button class="ct-clear" id="ctClear">Clear</button>
+      <button class="ct-go" id="ctGo" disabled>Compare</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMPARE OVERLAY ===================== -->
+<div class="modal-back" id="compareBack" role="dialog" aria-modal="true">
+  <div class="compare-panel" id="comparePanel"></div>
+</div>
+
+<!-- ===================== MODAL ===================== -->
+<div class="modal-back" id="modal" role="dialog" aria-modal="true">
+  <div class="modal" id="modalInner"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
