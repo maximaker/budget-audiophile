@@ -667,21 +667,20 @@ body.has-compare { padding-bottom: 74px; }
   transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .sc-card:hover { transform: translateY(-4px); box-shadow: var(--sh-2); background: var(--card); }
-.sc-text { position: relative; z-index: 2; max-width: 56%; }
+.sc-text { position: relative; z-index: 2; max-width: 48%; }
 .sc-count { display: block; font-family: var(--mono); font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .sc-title { font-family: var(--serif); font-size: 1.9rem; font-weight: 600; letter-spacing: -.02em; margin: 0 0 9px; }
 .sc-blurb { font-size: .9rem; color: var(--ink-2); line-height: 1.45; margin: 0 0 20px; }
 .sc-link { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ember-dp); transition: gap .18s ease; }
 .sc-card:hover .sc-link { gap: 12px; }
 .sc-img {
-  position: absolute; z-index: 1; right: -2%; bottom: -5%; width: 54%; height: 82%;
-  background: transparent; display: grid; place-items: center;
+  position: absolute; z-index: 1; right: 18px; top: 50%; transform: translateY(-50%);
+  width: 45%; height: 74%; background: #FFFFFF; border-radius: 16px; overflow: hidden;
+  display: grid; place-items: center;
 }
-.sc-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px; mix-blend-mode: multiply; }
+.sc-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 11px; }
 .sc-img .art-fallback { display: none; position: absolute; inset: 0; place-items: center; }
-.sc-img .art-fallback svg { width: 56%; height: 56%; }
-:root[data-theme="dark"] .sc-img { background: #F1F1F0; border-radius: 18px; right: 5%; bottom: 9%; width: 46%; height: 64%; }
-:root[data-theme="dark"] .sc-img img { padding: 12px; }
+.sc-img .art-fallback svg { width: 54%; height: 54%; }
 
 .shortlists { padding: 8px 0 62px; }
 .sl-head { margin-bottom: 26px; max-width: 40em; }
