@@ -458,6 +458,66 @@ function renderSystems() {
   grid.querySelectorAll("[data-id]").forEach((el) => el.addEventListener("click", () => openModal(el.dataset.id)));
 }
 
+/* ---------- shop by category (teaser cards) ---------- */
+function renderCategoryCards() {
+  const grid = document.getElementById("catCards");
+  if (!grid) return;
+  grid.innerHTML = CATEGORIES.map((c) => {
+    const count = PRODUCTS.filter((p) => p.category === c.id).length;
+    const rep = PRODUCTS.find((p) => p.id === TOP_PICKS[c.id]) || PRODUCTS.find((p) => p.category === c.id);
+    const tt = TINTS[c.id];
+    return `<button class="sc-card" data-cat="${c.id}" aria-label="Browse ${c.label}">
+      <div class="sc-text">
+        <span class="sc-count">${count} picks</span>
+        <h3 class="sc-title">${c.label}</h3>
+        <p class="sc-blurb">${c.blurb}</p>
+        <span class="sc-link">Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="sc-img">
+        <img src="${rep.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+        <span class="art-fallback">${ART[c.id](tt)}</span>
+      </div>
+    </button>`;
+  }).join("");
+  grid.querySelectorAll("[data-cat]").forEach((b) =>
+    b.addEventListener("click", () => {
+      if (state.cat !== b.dataset.cat) { state.cat = b.dataset.cat; reconcileForCategory(); }
+      render();
+      document.getElementById("catalog").scrollIntoView({ behavior: "smooth", block: "start" });
+    }));
+}
+
+/* ---------- curated shortlists (multi-column) ---------- */
+function renderShortlists() {
+  const grid = document.getElementById("shortlists");
+  if (!grid) return;
+  const byRating = [...PRODUCTS].sort((a, b) => b.rating - a.rating || b.ratingCount - a.ratingCount);
+  const byValue = [...PRODUCTS].sort((a, b) => valueScore(b) - valueScore(a));
+  const fresh = PRODUCTS.filter((p) => FRESH.has(p.id)).sort((a, b) => b.rating - a.rating);
+  const byReviews = [...PRODUCTS].sort((a, b) => b.ratingCount - a.ratingCount);
+  const LISTS = [
+    { kicker: "Top rated", title: "Editor favourites", items: byRating.slice(0, 5) },
+    { kicker: "Rating per $", title: "Best value", items: byValue.slice(0, 5) },
+    { kicker: "New arrivals", title: "Just landed", items: fresh.slice(0, 5) },
+    { kicker: "Most reviewed", title: "Crowd favourites", items: byReviews.slice(0, 5) },
+  ];
+  grid.innerHTML = LISTS.map((col) => `
+    <div class="sl-col">
+      <span class="kicker">${col.kicker}</span>
+      <h3 class="sl-title">${col.title}</h3>
+      <div class="sl-rows">
+        ${col.items.map((p) => {
+          const tt = TINTS[p.category];
+          return `<button class="sl-row" data-id="${p.id}" aria-label="${p.brand} ${p.name} — details">
+            <span class="sl-thumb"><img src="${p.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="art-fallback">${ART[p.category](tt)}</span></span>
+            <span class="sl-meta"><span class="sl-name">${p.name}</span><span class="sl-sub">${stars(p.rating)}<span class="sl-price">${fmtPrice(p.price)}</span></span></span>
+          </button>`;
+        }).join("")}
+      </div>
+    </div>`).join("");
+  grid.querySelectorAll("[data-id]").forEach((el) => el.addEventListener("click", () => openModal(el.dataset.id)));
+}
+
 /* ============================================================
    Facet rendering (rebuilt each render for live counts)
    ============================================================ */
@@ -929,8 +989,10 @@ document.addEventListener("keydown", (e) => {
   setFacetsOpen(false); // collapsed by default
   if (activeFacetCount() > 0 || state.q) setFacetsOpen(true); // open rail if a shared view has filters
   buildHero();
+  renderCategoryCards();
   renderPicks();
   renderSystems();
+  renderShortlists();
   _urlReady = true;
   render();
   if (deepItem && PRODUCTS.some((p) => p.id === deepItem)) openModal(deepItem);
