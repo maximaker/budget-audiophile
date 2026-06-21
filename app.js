@@ -53,13 +53,11 @@ const ART = {
     </svg>`,
 };
 
+/* uniform neutral product tile (monochrome — products carry the colour) */
+const NEUTRAL_TINT = { fill: "#E7E7E4", ink: "#585858", accent: "#2A2A2A", bg: "linear-gradient(160deg,#F4F4F3,#FFFFFF)" };
 const TINTS = {
-  iems:       { fill: "#F4E7DF", ink: "#7A3B26", accent: "#C2593A", bg: "linear-gradient(155deg,#FBF2EC,#FFFFFF)" },
-  headphones: { fill: "#E7EEE8", ink: "#3A5347", accent: "#46695A", bg: "linear-gradient(155deg,#F0F5F0,#FFFFFF)" },
-  dacamp:     { fill: "#E9EEF4", ink: "#344A65", accent: "#41597A", bg: "linear-gradient(155deg,#F0F4F9,#FFFFFF)" },
-  speakers:   { fill: "#F6EEDC", ink: "#7A5C22", accent: "#C68C32", bg: "linear-gradient(155deg,#FBF5E8,#FFFFFF)" },
-  turntables: { fill: "#F2E9EE", ink: "#6B4150", accent: "#9C5670", bg: "linear-gradient(155deg,#F8F0F4,#FFFFFF)" },
-  players:    { fill: "#E9E6F1", ink: "#403866", accent: "#5C4F94", bg: "linear-gradient(155deg,#EEEBF5,#FFFFFF)" },
+  iems: NEUTRAL_TINT, headphones: NEUTRAL_TINT, dacamp: NEUTRAL_TINT,
+  speakers: NEUTRAL_TINT, turntables: NEUTRAL_TINT, players: NEUTRAL_TINT,
 };
 
 const catLabel = (id) => (CATEGORIES.find((c) => c.id === id) || {}).label || id;
@@ -473,7 +471,7 @@ function renderCategoryCards() {
         <p class="sc-blurb">${c.blurb}</p>
         <span class="sc-link">Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
-      <div class="sc-img" style="background:${tt.bg}">
+      <div class="sc-img">
         <img src="${rep.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
         <span class="art-fallback">${ART[c.id](tt)}</span>
       </div>
