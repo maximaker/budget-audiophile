@@ -468,12 +468,12 @@ function renderCategoryCards() {
     const tt = TINTS[c.id];
     return `<button class="sc-card" data-cat="${c.id}" aria-label="Browse ${c.label}">
       <div class="sc-text">
-        <span class="sc-count">${count} picks</span>
+        <span class="sc-count">${count} pick${count === 1 ? "" : "s"}</span>
         <h3 class="sc-title">${c.label}</h3>
         <p class="sc-blurb">${c.blurb}</p>
         <span class="sc-link">Explore <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
-      <div class="sc-img">
+      <div class="sc-img" style="background:${tt.bg}">
         <img src="${rep.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
         <span class="art-fallback">${ART[c.id](tt)}</span>
       </div>
@@ -509,7 +509,7 @@ function renderShortlists() {
         ${col.items.map((p) => {
           const tt = TINTS[p.category];
           return `<button class="sl-row" data-id="${p.id}" aria-label="${p.brand} ${p.name} — details">
-            <span class="sl-thumb"><img src="${p.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="art-fallback">${ART[p.category](tt)}</span></span>
+            <span class="sl-thumb" style="background:${tt.bg}"><img src="${p.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="art-fallback">${ART[p.category](tt)}</span></span>
             <span class="sl-meta"><span class="sl-name">${p.name}</span><span class="sl-sub">${stars(p.rating)}<span class="sl-price">${fmtPrice(p.price)}</span></span></span>
           </button>`;
         }).join("")}
