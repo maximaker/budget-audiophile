@@ -297,7 +297,7 @@ const typeOptionsFor = (cat) => TYPE_FACETS[cat] || [];
 /* ============================================================
    State
    ============================================================ */
-const state = { q: "", cat: "all", type: "all", price: "all", sounds: [], genres: [], sort: "rating", view: "gallery", facetsOpen: false, compare: [], openItem: null };
+const state = { q: "", cat: "all", type: "all", price: "all", sounds: [], genres: [], sort: "rating", view: "gallery", facetsOpen: false, compare: [], openItem: null, spotlight: 0 };
 
 const $ = (id) => document.getElementById(id);
 const els = {
@@ -386,16 +386,6 @@ function buildHero() {
   ];
   els.heroStats.innerHTML = stats.map((s) => `<div class="hstat"><div class="k">${s.k}</div><div class="v">${s.v}</div></div>`).join("");
   els.navCount.textContent = PRODUCTS.length;
-
-  // generate a calm soundwave path (static, decorative)
-  const W = 1200, mid = 30;
-  let d = "";
-  for (let x = 0; x <= W; x += 8) {
-    const env = Math.sin((x / W) * Math.PI); // taper at the ends
-    const y = mid + Math.sin(x / 42) * 9 * env + Math.sin(x / 13) * 4 * env;
-    d += (x === 0 ? "M" : "L") + x.toFixed(0) + " " + y.toFixed(1) + " ";
-  }
-  els.wavePath.setAttribute("d", d.trim());
 }
 
 /* ---------- editor's picks (curated entry points) ---------- */
@@ -404,33 +394,37 @@ const PICKS = [
   { id: "hexa", role: "Best all-rounder", note: "The sub-$100 benchmark" },
   { id: "hd6xx", role: "Endgame on a budget", note: "Buy once, keep for years" },
 ];
-function renderPicks() {
-  const grid = document.getElementById("picksGrid");
-  if (grid) {
-    grid.innerHTML = PICKS.map((pk) => {
-      const p = PRODUCTS.find((x) => x.id === pk.id);
-      if (!p) return "";
-      const t = TINTS[p.category];
-      return `<article class="pick" data-id="${p.id}" tabindex="0" role="button" aria-label="${p.brand} ${p.name} — details">
-        <div class="pick-top"><span class="pick-role">${pk.role}</span><span class="pick-arrow">↗</span></div>
-        <div class="pick-thumb" style="background:${t.bg}">
-          <img class="prod-img" src="${p.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-          <span class="art-fallback">${ART[p.category](t)}</span>
-        </div>
-        <div class="pick-brand">${p.brand}</div>
-        <h3 class="pick-name">${p.name}</h3>
-        <p class="pick-note">${pk.note}</p>
-        <div class="pick-foot">
-          <span class="pick-rating">${"★".repeat(Math.round(p.rating))} ${p.rating.toFixed(1)}</span>
-          <span class="pick-price">${fmtPrice(p.price)}</span>
-        </div>
-      </article>`;
-    }).join("");
-    grid.querySelectorAll("[data-id]").forEach((el) => {
-      el.addEventListener("click", () => openModal(el.dataset.id));
-      el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(el.dataset.id); } });
-    });
+const SPOTLIGHT = PICKS; // featured carousel = the three editor's picks
+function renderSpotThumbs() {
+  const el = document.getElementById("spotThumbs");
+  if (!el) return;
+  el.innerHTML = SPOTLIGHT.map((pk, idx) => {
+    const p = PRODUCTS.find((x) => x.id === pk.id);
+    return `<button class="spot-thumb${idx === state.spotlight ? " active" : ""}" data-spot="${idx}" aria-label="${p.brand} ${p.name}"><img src="${p.image}" alt="" decoding="async"></button>`;
+  }).join("");
+  el.querySelectorAll("[data-spot]").forEach((b) =>
+    b.addEventListener("click", () => { state.spotlight = +b.dataset.spot; renderSpotlight(); }));
+}
+function renderSpotlight() {
+  const i = ((state.spotlight % SPOTLIGHT.length) + SPOTLIGHT.length) % SPOTLIGHT.length;
+  state.spotlight = i;
+  const pk = SPOTLIGHT[i], p = PRODUCTS.find((x) => x.id === pk.id);
+  if (!p) return;
+  const pager = `${String(i + 1).padStart(2, "0")} / ${String(SPOTLIGHT.length).padStart(2, "0")}`;
+  const photo = document.getElementById("spotPhoto");
+  if (photo) photo.innerHTML = `<img class="prod-img" src="${p.image}" alt="${p.brand} ${p.name}" decoding="async">`;
+  const info = document.getElementById("spotInfo");
+  if (info) {
+    info.innerHTML = `
+      <span class="spot-role">${pk.role}<span class="spot-pager">${pager}</span></span>
+      <h1 class="spot-name">${p.name}</h1>
+      <div class="spot-sub">${p.brand} · ${catLabel(p.category)}</div>
+      <p class="spot-blurb">${p.blurb}</p>
+      <div class="spot-rating">${stars(p.rating)}<span class="spot-rval">${p.rating.toFixed(1)}</span><span class="spot-rprice">${fmtPrice(p.price)}</span></div>
+      <button class="btn btn-primary spot-cta" data-id="${p.id}">Discover more <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
+    info.querySelector(".spot-cta").addEventListener("click", () => openModal(p.id));
   }
+  document.querySelectorAll(".spot-thumb").forEach((t, idx) => t.classList.toggle("active", idx === i));
 }
 
 /* ---------- starter systems ---------- */
@@ -988,9 +982,13 @@ document.addEventListener("keydown", (e) => {
   if (activeFacetCount() > 0 || state.q) setFacetsOpen(true); // open rail if a shared view has filters
   buildHero();
   renderCategoryCards();
-  renderPicks();
+  renderSpotThumbs();
+  renderSpotlight();
   renderSystems();
   renderShortlists();
+  const sp = $("spotPrev"), sn = $("spotNext");
+  if (sp) sp.addEventListener("click", () => { state.spotlight--; renderSpotlight(); });
+  if (sn) sn.addEventListener("click", () => { state.spotlight++; renderSpotlight(); });
   _urlReady = true;
   render();
   if (deepItem && PRODUCTS.some((p) => p.id === deepItem)) openModal(deepItem);

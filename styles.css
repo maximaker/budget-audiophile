@@ -101,7 +101,7 @@ h1,h2,h3 { margin: 0; }
 .hdr-meta .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pine); margin-right: 4px; }
 
 /* ----------------------------- hero ----------------------------- */
-.hero { padding: 86px 0 0; }
+.hero { padding: 36px 0 10px; }
 .hero-in { display: grid; grid-template-columns: 1.08fr .92fr; gap: 64px; align-items: center; padding-bottom: 66px; }
 
 .eyebrow {
@@ -138,39 +138,39 @@ h1,h2,h3 { margin: 0; }
 .hstat .k { font-family: var(--mono); font-size: .6rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
 .hstat .v { font-family: var(--serif); font-size: 1.5rem; font-weight: 560; letter-spacing: -.02em; line-height: 1; margin-top: 9px; }
 
-/* hero media */
-.hero-media { position: relative; }
-/* halftone aura removed for the clean monochrome look */
-.hero-dots { display: none; }
-.hero-photo {
-  position: relative; z-index: 1; margin: 0; aspect-ratio: 4 / 3.4;
-  border-radius: var(--r-lg); overflow: hidden;
-  border: 1px solid var(--line); box-shadow: var(--sh-2);
-  background: var(--paper-2);
-}
-.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
-.hero-photo figcaption {
-  position: absolute; left: 14px; bottom: 14px;
-  font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; color: #fff;
-  background: rgba(20,20,20,.62); backdrop-filter: blur(4px);
-  padding: 6px 11px; border-radius: 100px; display: flex; align-items: center; gap: 7px;
-}
-.hero-photo .tick { color: #D2D2D2; font-size: .7rem; }
-
-.float-chip {
-  position: absolute; z-index: 2; background: var(--card); border: 1px solid var(--line);
-  border-radius: 13px; box-shadow: var(--sh-2); display: flex; align-items: center;
-}
-/* bold accent-fill tile (the "From CAI" block vibe) */
-.chip-rating { top: 22px; right: -16px; gap: 10px; padding: 13px 17px; font-size: .82rem; background: var(--ember); border: none; border-radius: 16px; color: #fff; }
-.chip-rating .cr-stars { color: #fff; letter-spacing: -1px; font-size: .82rem; }
-.chip-rating b { color: #fff; }
-.chip-price { bottom: 26px; left: -18px; flex-direction: column; align-items: flex-start; padding: 12px 18px; border-radius: 16px; }
-.chip-price .fc-k { font-family: var(--mono); font-size: .58rem; letter-spacing: .12em; color: var(--faint); }
-.chip-price .fc-v { font-family: var(--serif); font-weight: 600; font-size: 1.5rem; line-height: 1; color: var(--ember); }
-
-/* soundwave divider removed for the clean monochrome look */
-.wave { display: none; }
+/* featured spotlight hero */
+.spot-lead { margin-bottom: 22px; }
+.spot { display: grid; grid-template-columns: 1.05fr .95fr; gap: 50px; align-items: center; }
+.spot-stage { position: relative; background: var(--paper-2); border-radius: var(--r-lg); aspect-ratio: 4 / 3; display: grid; place-items: center; overflow: hidden; }
+.spot-photo { margin: 0; width: 100%; height: 100%; display: grid; place-items: center; }
+.spot-photo img { width: 84%; height: 84%; object-fit: contain; mix-blend-mode: multiply; }
+.spot-arrows { position: absolute; left: 16px; bottom: 16px; display: flex; gap: 8px; z-index: 2; }
+.spot-arrow { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--card); color: var(--ink); display: grid; place-items: center; box-shadow: var(--sh-1); transition: background .15s ease, color .15s ease, border-color .15s ease, transform .15s ease; }
+.spot-arrow:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: translateY(-1px); }
+.spot-role { display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ember-dp); margin-bottom: 18px; }
+.spot-pager { color: var(--faint); letter-spacing: .16em; }
+.spot-name { font-family: var(--serif); font-weight: 600; font-size: clamp(2.6rem, 5vw, 4rem); letter-spacing: -.03em; line-height: 1; margin: 0 0 9px; }
+.spot-sub { font-family: var(--mono); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.spot-blurb { font-size: 1.08rem; color: var(--ink-2); line-height: 1.55; max-width: 30em; margin: 0 0 20px; }
+.spot-rating { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.spot-rating .stars { color: var(--gold); }
+.spot-rating .stars svg { width: 17px; height: 17px; }
+.spot-rval { font-family: var(--mono); font-weight: 700; font-size: .92rem; }
+.spot-rprice { margin-left: auto; font-family: var(--serif); font-weight: 600; font-size: 1.3rem; }
+.spot-cta { margin-top: 2px; }
+.spot-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line); }
+.spot-thumbs { display: flex; gap: 12px; }
+.spot-thumb { position: relative; width: 74px; height: 62px; border-radius: 12px; background: #FFFFFF; border: 1px solid var(--line); padding: 9px; transition: border-color .15s ease; }
+.spot-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.spot-thumb:hover { border-color: var(--line-2); }
+.spot-thumb.active { border-color: var(--ink); }
+.spot-thumb.active::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: -9px; height: 2px; background: var(--ink); border-radius: 2px; }
+.spot-foot .hero-stats { display: flex; gap: 26px; padding: 0; border: 0; margin: 0; }
+.spot-foot .hstat { background: none; padding: 0; }
+.spot-foot .hstat:hover { background: none; transform: none; }
+.spot-foot .hstat .k { font-size: .58rem; }
+.spot-foot .hstat .v { font-size: 1.18rem; margin-top: 4px; }
+:root[data-theme="dark"] .spot-stage { background: #F1F1F0; }
 
 /* ============================================================
    CATALOG — faceted layout
@@ -707,7 +707,8 @@ body.has-compare { padding-bottom: 74px; }
    ============================================================ */
 @media (max-width: 1000px) {
   .hero-in { grid-template-columns: 1fr; gap: 40px; }
-  .hero-media { max-width: 440px; }
+  .spot { grid-template-columns: 1fr; gap: 28px; }
+  .spot-info { max-width: 36em; }
   .catalog, .catalog.facets-open { grid-template-columns: 1fr; gap: 22px; }
   .facets { position: static; }
   /* horizontal "Filter" pill in both states on narrow screens */
@@ -741,8 +742,12 @@ body.has-compare { padding-bottom: 74px; }
   .hdr-meta { display: none; }
   .theme-toggle { margin-left: auto; }
   .brand-name { font-size: 1.08rem; }
-  .hero { padding-top: 56px; }
+  .hero { padding-top: 28px; }
   .hero-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .spot-thumb { width: 60px; height: 52px; padding: 7px; }
+  .spot-foot { gap: 18px; row-gap: 22px; }
+  .spot-foot .hero-stats { gap: 18px; flex-wrap: wrap; }
+  .spot-name { font-size: clamp(2.2rem, 11vw, 3rem); }
   /* keep floating accent tiles inside the viewport */
   .float-chip.chip-rating { right: 2px; }
   .float-chip.chip-price { left: 2px; }

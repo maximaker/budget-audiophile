@@ -41,45 +41,29 @@
 
   <main id="top">
 
-    <!-- ===================== HERO ===================== -->
+    <!-- ===================== HERO — FEATURED SPOTLIGHT ===================== -->
     <section class="hero">
-      <div class="wrap hero-in">
-        <div class="hero-copy">
+      <div class="wrap">
+        <div class="spot-lead">
           <span class="eyebrow">
             <svg class="eq" width="16" height="14" viewBox="0 0 16 14" aria-hidden="true"><rect x="0" y="5" width="2.6" height="9" rx="1.3"/><rect x="4.5" y="1" width="2.6" height="13" rx="1.3"/><rect x="9" y="7" width="2.6" height="7" rx="1.3"/><rect x="13.4" y="3" width="2.6" height="11" rx="1.3"/></svg>
-            Independent · no sponsored picks
+            Editor's picks · where to start
           </span>
-          <h1>Hi-fi that <em>sounds</em> expensive.<br>Prices that aren't.</h1>
-          <p class="lede">A field guide to the gear that punches far above its price — quietly excellent brands, rated and reviewed, cross-checked against the community so you can buy once and listen for years.</p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="#catalog">
-              Browse the catalog
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a class="btn btn-ghost" href="#method">How we rate</a>
+        </div>
+        <div class="spot">
+          <div class="spot-stage">
+            <figure class="spot-photo" id="spotPhoto"></figure>
+            <div class="spot-arrows">
+              <button class="spot-arrow" id="spotPrev" aria-label="Previous pick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="spot-arrow" id="spotNext" aria-label="Next pick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
           </div>
+          <div class="spot-info" id="spotInfo"></div>
+        </div>
+        <div class="spot-foot">
+          <div class="spot-thumbs" id="spotThumbs"></div>
           <dl class="hero-stats" id="heroStats"></dl>
         </div>
-
-        <div class="hero-media">
-          <div class="hero-dots" id="heroDots" aria-hidden="true"></div>
-          <figure class="hero-photo">
-            <img src="assets/hero.jpg" alt="A pair of audiophile headphones resting on a minimal desk" />
-            <figcaption><span class="tick">●</span> NOW AUDITIONING</figcaption>
-          </figure>
-          <div class="float-chip chip-rating">
-            <span class="cr-stars">★★★★★</span>
-            <span><b>4.8</b> editor favourite</span>
-          </div>
-          <div class="float-chip chip-price"><span class="fc-k">FROM</span><span class="fc-v">$9</span></div>
-        </div>
-      </div>
-
-      <!-- soundwave divider -->
-      <div class="wave" aria-hidden="true">
-        <svg viewBox="0 0 1200 60" preserveAspectRatio="none" width="100%" height="44">
-          <path id="wavePath" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-        </svg>
       </div>
     </section>
 
@@ -90,19 +74,6 @@
         <h2>Shop by category</h2>
       </div>
       <div class="sc-grid" id="catCards"></div>
-    </section>
-
-    <!-- ===================== EDITOR'S PICKS ===================== -->
-    <section class="picks">
-      <div class="picks-dots" id="picksDots" aria-hidden="true"></div>
-      <div class="wrap picks-in">
-        <div class="picks-head">
-          <span class="kicker">Where to start</span>
-          <h2>Three ways in.</h2>
-          <p>New to better sound? These three cover the whole spread — from a pocket-money first buy to a keeper you'll never feel the need to upgrade.</p>
-        </div>
-        <div class="picks-grid" id="picksGrid"></div>
-      </div>
     </section>
 
     <!-- ===================== CATALOG ===================== -->
