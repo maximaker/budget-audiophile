@@ -187,11 +187,21 @@ function pairsFor(p) {
 
 /* --- starter systems (curated bundles) --- */
 const STARTER_SYSTEMS = [
-  { name: "Pocket hi-fi", tag: "On the go", items: ["ew200", "snowsky-melody"], blurb: "A musical IEM and a wood-bodied balanced dongle — serious sound in a coat pocket." },
-  { name: "The desktop starter", tag: "At the desk", items: ["hd6xx", "fosi-k7"], blurb: "The classic open-back and a do-it-all desktop amp with power to spare." },
-  { name: "First real speakers", tag: "For the room", items: ["q1meta", "fosi-za3"], blurb: "KEF's coaxial magic, driven by the internet's favourite budget amp." },
-  { name: "Vinyl from scratch", tag: "Spin records", items: ["rt81", "r1280t"], blurb: "An upgradeable belt-drive deck into powered speakers — plug in and drop the needle." },
+  { id: "pocket-hifi", name: "Pocket hi-fi", tag: "On the go", items: ["ew200", "snowsky-melody"],
+    blurb: "A musical IEM and a wood-bodied balanced dongle — serious sound in a coat pocket.",
+    about: "Everything you need to carry a real hi-fi signature out the door. Plug the dongle into any phone or laptop, slot in the IEMs, and you're listening to a clean, musical sound that costs less than a pair of mainstream wireless earbuds — and keeps the cable-free convenience of Bluetooth as a bonus." },
+  { id: "desktop-starter", name: "The desktop starter", tag: "At the desk", items: ["hd6xx", "fosi-k7"],
+    blurb: "The classic open-back and a do-it-all desktop amp with power to spare.",
+    about: "The canonical introduction to a 'big', open headphone sound at a desk. The amp gives the open-back the clean power it craves, while its DAC, Bluetooth and tone controls cover every source. It's the setup people buy once and keep for years." },
+  { id: "first-real-speakers", name: "First real speakers", tag: "For the room", items: ["q1meta", "fosi-za3"],
+    blurb: "KEF's coaxial magic, driven by the internet's favourite budget amp.",
+    about: "A genuine two-channel system for a room, on a budget. The tiny TPA3255 amp drives KEF's coaxial bookshelf speakers with surprising authority — add any source (phone, laptop, or a turntable) and you have proper stereo imaging that belies the price. Mind the power supply on the amp; it matters." },
+  { id: "vinyl-from-scratch", name: "Vinyl from scratch", tag: "Spin records", items: ["rt81", "r1280t"],
+    blurb: "An upgradeable belt-drive deck into powered speakers — plug in and drop the needle.",
+    about: "Records from a standing start, no separates required. The belt-drive deck has a switchable built-in preamp, so it plugs straight into the powered speakers — drop the needle and go. As you catch the bug, switch the preamp off and add a better one, or upgrade the cartridge." },
 ];
+const systemBySlug = (slug) => STARTER_SYSTEMS.find((s) => s.id === slug);
+const ROLE_LABEL = { iems: "In-ear monitors", headphones: "Headphones", dacamp: "Source & amp", players: "Player", speakers: "Speakers", turntables: "Turntable" };
 
 /* --- value score (rating per dollar, gently) --- */
 const valueScore = (p) => p.rating / Math.pow(p.price, 0.4);
@@ -297,7 +307,7 @@ const typeOptionsFor = (cat) => TYPE_FACETS[cat] || [];
 /* ============================================================
    State
    ============================================================ */
-const state = { q: "", cat: "all", type: "all", price: "all", sounds: [], genres: [], sort: "rating", view: "gallery", facetsOpen: false, compare: [], openItem: null, spotlight: 0 };
+const state = { q: "", cat: "all", type: "all", price: "all", sounds: [], genres: [], sort: "rating", view: "gallery", facetsOpen: false, compare: [], openItem: null, spotlight: 0, gallery: 0, route: "home" };
 
 const $ = (id) => document.getElementById(id);
 const els = {
@@ -308,6 +318,7 @@ const els = {
   catalog: document.querySelector(".catalog"), facets: $("facets"),
   facetToggle: $("facetToggle"), facetPanel: $("facetPanel"), facetBadge: $("facetBadge"),
   ciSub: document.querySelector(".ci-sub"),
+  home: $("top"), systemsView: $("systemsView"),
 };
 
 function setFacetsOpen(open) {
@@ -428,26 +439,97 @@ function renderSpotlight() {
 }
 
 /* ---------- starter systems ---------- */
+function systemCardHTML(sys) {
+  const items = sys.items.map((id) => PRODUCTS.find((x) => x.id === id)).filter(Boolean);
+  const total = items.reduce((s, x) => s + x.price, 0);
+  const itemsHTML = items.map((x, idx) => {
+    const tt = TINTS[x.category];
+    return `${idx > 0 ? '<span class="sys-plus">+</span>' : ""}<span class="sys-item">
+      <span class="sys-thumb" style="background:${tt.bg}"><img src="${x.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="art-fallback">${ART[x.category](tt)}</span></span>
+      <span class="sys-name">${x.name}</span></span>`;
+  }).join("");
+  return `<a class="system" href="#/system/${sys.id}" aria-label="${sys.name} — view system">
+    <div class="sys-top"><span class="sys-tag">${sys.tag}</span><span class="sys-total">${fmtPrice(total)}</span></div>
+    <h3 class="sys-name-title">${sys.name}</h3>
+    <p class="sys-blurb">${sys.blurb}</p>
+    <div class="sys-items">${itemsHTML}</div>
+    <span class="sys-cta">View system <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </a>`;
+}
 function renderSystems() {
   const grid = document.getElementById("systemsGrid");
-  if (!grid) return;
-  grid.innerHTML = STARTER_SYSTEMS.map((sys) => {
-    const items = sys.items.map((id) => PRODUCTS.find((x) => x.id === id)).filter(Boolean);
-    const total = items.reduce((s, x) => s + x.price, 0);
-    const itemsHTML = items.map((x, idx) => {
-      const tt = TINTS[x.category];
-      return `${idx > 0 ? '<span class="sys-plus">+</span>' : ""}<button class="sys-item" data-id="${x.id}" aria-label="${x.brand} ${x.name} — details">
-        <span class="sys-thumb" style="background:${tt.bg}"><img src="${x.image}" alt="" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="art-fallback">${ART[x.category](tt)}</span></span>
-        <span class="sys-name">${x.name}</span></button>`;
-    }).join("");
-    return `<article class="system">
-      <div class="sys-top"><span class="sys-tag">${sys.tag}</span><span class="sys-total">${fmtPrice(total)}</span></div>
-      <h3 class="sys-name-title">${sys.name}</h3>
-      <p class="sys-blurb">${sys.blurb}</p>
-      <div class="sys-items">${itemsHTML}</div>
+  if (grid) grid.innerHTML = STARTER_SYSTEMS.map(systemCardHTML).join("");
+}
+
+/* ---------- starter-systems pages (hash-routed) ---------- */
+function systemsOverviewHTML() {
+  return `
+    <section class="wrap page-hero">
+      <nav class="crumbs"><a href="#top">Home</a><span>/</span><span aria-current="page">Systems</span></nav>
+      <span class="kicker">Build a system</span>
+      <h1 class="page-title">Starter systems</h1>
+      <p class="page-lede">Proven budget pairings — a source and a transducer, or a deck and a pair of speakers — chosen to sing together. Each is a complete setup you can buy today and grow into.</p>
+    </section>
+    <section class="wrap"><div class="systems-grid systems-grid-page">${STARTER_SYSTEMS.map(systemCardHTML).join("")}</div></section>`;
+}
+function systemDetailHTML(sys) {
+  const items = sys.items.map((id) => PRODUCTS.find((x) => x.id === id)).filter(Boolean);
+  const total = items.reduce((s, x) => s + x.price, 0);
+  const comps = items.map((x, i) => {
+    const tt = TINTS[x.category];
+    return `${i > 0 ? '<div class="comp-join" aria-hidden="true">+</div>' : ""}<article class="comp">
+      <div class="comp-art" style="background:${tt.bg}"><img class="prod-img" src="${x.image}" alt="${x.brand} ${x.name}" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><span class="art-fallback">${ART[x.category](tt)}</span></div>
+      <div class="comp-info">
+        <span class="comp-role">${ROLE_LABEL[x.category] || "Component"}</span>
+        <div class="comp-brand">${x.brand}</div>
+        <h3 class="comp-name">${x.name}</h3>
+        <div class="comp-rate">${stars(x.rating)}<span class="comp-rval">${x.rating.toFixed(1)}</span></div>
+        <p class="comp-blurb">${x.blurb}</p>
+        <div class="comp-foot"><span class="comp-price">${fmtPrice(x.price)}</span><button class="btn btn-ghost comp-cta" data-id="${x.id}">View details</button></div>
+      </div>
     </article>`;
   }).join("");
-  grid.querySelectorAll("[data-id]").forEach((el) => el.addEventListener("click", () => openModal(el.dataset.id)));
+  return `
+    <section class="wrap page-hero">
+      <nav class="crumbs"><a href="#top">Home</a><span>/</span><a href="#/systems">Systems</a><span>/</span><span aria-current="page">${sys.name}</span></nav>
+      <span class="kicker">${sys.tag}</span>
+      <h1 class="page-title">${sys.name}</h1>
+      <p class="page-lede">${sys.about}</p>
+      <div class="sys-detail-meta">
+        <div><span class="sdm-k">Complete setup</span><span class="sdm-v">${fmtPrice(total)}</span></div>
+        <div><span class="sdm-k">Pieces</span><span class="sdm-v">${items.length}</span></div>
+      </div>
+    </section>
+    <section class="wrap sys-components">${comps}</section>
+    <section class="wrap sys-cta-band">
+      <a class="btn btn-ghost" href="#/systems">← All systems</a>
+      <a class="btn btn-primary" href="#catalog">Browse the full catalogue <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </section>`;
+}
+function wireSystemsView() {
+  els.systemsView.querySelectorAll("[data-id]").forEach((b) => b.addEventListener("click", () => openModal(b.dataset.id)));
+}
+function applyRoute(initial) {
+  const h = location.hash;
+  if (h === "#/systems") {
+    state.route = "systems"; els.home.hidden = true; els.systemsView.hidden = false;
+    els.systemsView.innerHTML = systemsOverviewHTML(); wireSystemsView(); window.scrollTo(0, 0);
+  } else if (h.indexOf("#/system/") === 0) {
+    const sys = systemBySlug(decodeURIComponent(h.slice(9)));
+    if (!sys) { location.hash = "#/systems"; return; }
+    state.route = "system"; els.home.hidden = true; els.systemsView.hidden = false;
+    els.systemsView.innerHTML = systemDetailHTML(sys); wireSystemsView(); window.scrollTo(0, 0);
+  } else {
+    if (!initial && state.route === "home") return; // in-page anchor (#catalog etc.) — just let it scroll
+    state.route = "home"; els.systemsView.hidden = true; els.home.hidden = false;
+    readURL();
+    setFacetsOpen(activeFacetCount() > 0 || !!state.q);
+    render();
+    if (initial) {
+      const it = new URLSearchParams(location.hash.slice(1)).get("item");
+      if (it && PRODUCTS.some((p) => p.id === it)) openModal(it);
+    }
+  }
 }
 
 /* ---------- shop by category (teaser cards) ---------- */
@@ -940,7 +1022,7 @@ function applyTheme(t) {
 }
 let _urlReady = false;
 function writeURL() {
-  if (!_urlReady) return;
+  if (!_urlReady || state.route !== "home") return;
   const sp = new URLSearchParams();
   if (state.q) sp.set("q", state.q);
   if (state.cat !== "all") sp.set("cat", state.cat);
@@ -1014,9 +1096,7 @@ document.addEventListener("keydown", (e) => {
   try { theme = localStorage.getItem("ba-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); } catch (e) {}
   applyTheme(theme);
 
-  const deepItem = readURL();
   setFacetsOpen(false); // collapsed by default
-  if (activeFacetCount() > 0 || state.q) setFacetsOpen(true); // open rail if a shared view has filters
   buildHero();
   renderCategoryCards();
   renderSpotThumbs();
@@ -1027,6 +1107,6 @@ document.addEventListener("keydown", (e) => {
   if (sp) sp.addEventListener("click", () => { state.spotlight--; renderSpotlight(); });
   if (sn) sn.addEventListener("click", () => { state.spotlight++; renderSpotlight(); });
   _urlReady = true;
-  render();
-  if (deepItem && PRODUCTS.some((p) => p.id === deepItem)) openModal(deepItem);
+  window.addEventListener("hashchange", () => applyRoute(false));
+  applyRoute(true); // route: home (with filters/deep-link) or a systems page
 })();
