@@ -394,7 +394,8 @@ h1,h2,h3 { margin: 0; }
 .modal-gallery { display: flex; flex-direction: column; border-right: 1px solid var(--line); }
 .modal-art { position: relative; aspect-ratio: 1/1; display: grid; place-items: center; overflow: hidden; background: var(--paper-2); }
 :root[data-theme="dark"] .modal-art { background: #F1F1F0; }
-.modal-art .prod-img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; padding: 0; }
+.modal-art .prod-img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; padding: 40px; mix-blend-mode: multiply; }
+.modal-art .prod-img.fit-cover { object-fit: cover; padding: 0; mix-blend-mode: normal; }
 .modal-art .art-fallback { display: none; position: absolute; inset: 0; place-items: center; }
 .modal-art .art-fallback svg { width: 60%; height: 60%; }
 .gal-arrows { position: absolute; left: 16px; bottom: 16px; z-index: 3; display: flex; gap: 8px; }

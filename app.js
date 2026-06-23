@@ -802,7 +802,10 @@ function render() {
 /* ============================================================
    Detail modal
    ============================================================ */
-const imagesFor = (p) => (p.images && p.images.length ? p.images : [p.image]);
+const imagesFor = (p) => {
+  const raw = p.images && p.images.length ? p.images : [p.image];
+  return raw.map((im) => (typeof im === "string" ? { src: im, fit: "contain" } : { fit: "contain", ...im }));
+};
 function galleryImages() {
   const p = PRODUCTS.find((x) => x.id === state.openItem);
   return p ? imagesFor(p) : [];
@@ -812,7 +815,10 @@ function showGalleryImage(idx) {
   if (n < 2) return;
   state.gallery = ((idx % n) + n) % n;
   const m = $("galMain");
-  if (m) m.src = imgs[state.gallery];
+  if (m) {
+    m.src = imgs[state.gallery].src;
+    m.classList.toggle("fit-cover", imgs[state.gallery].fit === "cover");
+  }
   document.querySelectorAll(".gal-thumb").forEach((t, i) => t.classList.toggle("active", i === state.gallery));
 }
 
@@ -863,14 +869,14 @@ function openModal(id) {
       <button class="modal-close" id="mClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <div class="modal-gallery">
         <div class="modal-art">
-          <img class="prod-img" id="galMain" src="${imgs[0]}" alt="${p.brand} ${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <img class="prod-img${imgs[0].fit === "cover" ? " fit-cover" : ""}" id="galMain" src="${imgs[0].src}" alt="${p.brand} ${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
           <span class="art-fallback">${ART[p.category](t)}</span>
           ${multi ? `<div class="gal-arrows">
             <button class="spot-arrow" id="galPrev" aria-label="Previous image"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <button class="spot-arrow" id="galNext" aria-label="Next image"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>` : ""}
         </div>
-        ${multi ? `<div class="gal-thumbs" id="galThumbs">${imgs.map((src, idx) => `<button class="gal-thumb${idx === 0 ? " active" : ""}" data-gal="${idx}" aria-label="View image ${idx + 1}"><img src="${src}" alt="" decoding="async" onerror="this.style.display='none'"></button>`).join("")}</div>` : ""}
+        ${multi ? `<div class="gal-thumbs" id="galThumbs">${imgs.map((im, idx) => `<button class="gal-thumb${idx === 0 ? " active" : ""}" data-gal="${idx}" aria-label="View image ${idx + 1}"><img src="${im.src}" alt="" decoding="async" onerror="this.style.display='none'"></button>`).join("")}</div>` : ""}
       </div>
       <div class="modal-intro">
         <span class="b">${p.brand} · ${catLabel(p.category)}</span>
