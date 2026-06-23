@@ -391,12 +391,19 @@ h1,h2,h3 { margin: 0; }
 .modal-back.open .modal { transform: none; opacity: 1; }
 
 .modal-head { position: relative; display: grid; grid-template-columns: 1fr 1.04fr; }
-.modal-art { position: relative; aspect-ratio: 1/1; display: grid; place-items: center; border-right: 1px solid var(--line); overflow: hidden; background: var(--paper-2); }
+.modal-gallery { display: flex; flex-direction: column; border-right: 1px solid var(--line); }
+.modal-art { position: relative; aspect-ratio: 1/1; display: grid; place-items: center; overflow: hidden; background: var(--paper-2); }
 :root[data-theme="dark"] .modal-art { background: #F1F1F0; }
 .modal-art .prod-img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; padding: 40px; mix-blend-mode: multiply; }
 .modal-art .art-fallback { display: none; position: absolute; inset: 0; place-items: center; }
 .modal-art .art-fallback svg { width: 60%; height: 60%; }
-.modal-nav { position: absolute; left: 16px; bottom: 16px; z-index: 3; display: flex; gap: 8px; }
+.gal-arrows { position: absolute; left: 16px; bottom: 16px; z-index: 3; display: flex; gap: 8px; }
+.gal-thumbs { display: flex; gap: 10px; padding: 16px 18px; flex-wrap: wrap; justify-content: center; }
+.gal-thumb { position: relative; width: 60px; height: 52px; border-radius: 10px; background: #FFFFFF; border: 1px solid var(--line); padding: 7px; transition: border-color .15s ease; }
+.gal-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.gal-thumb:hover { border-color: var(--line-2); }
+.gal-thumb.active { border-color: var(--ink); }
+.gal-thumb.active::after { content: ""; position: absolute; left: 24%; right: 24%; bottom: -8px; height: 2px; background: var(--ink); border-radius: 2px; }
 .modal-intro { padding: 38px 40px; display: flex; flex-direction: column; justify-content: center; }
 .modal-intro .b { font-family: var(--mono); font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ember-dp); }
 .modal-intro h2 { font-family: var(--serif); font-size: clamp(2.2rem, 3.4vw, 3rem); font-weight: 600; letter-spacing: -.025em; margin: 8px 0 12px; line-height: 1.0; }

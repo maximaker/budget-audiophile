@@ -720,12 +720,29 @@ function render() {
 /* ============================================================
    Detail modal
    ============================================================ */
+const imagesFor = (p) => (p.images && p.images.length ? p.images : [p.image]);
+function galleryImages() {
+  const p = PRODUCTS.find((x) => x.id === state.openItem);
+  return p ? imagesFor(p) : [];
+}
+function showGalleryImage(idx) {
+  const imgs = galleryImages(); const n = imgs.length;
+  if (n < 2) return;
+  state.gallery = ((idx % n) + n) % n;
+  const m = $("galMain");
+  if (m) m.src = imgs[state.gallery];
+  document.querySelectorAll(".gal-thumb").forEach((t, i) => t.classList.toggle("active", i === state.gallery));
+}
+
 function openModal(id) {
   const p = PRODUCTS.find((x) => x.id === id);
   if (!p) return;
   state.openItem = id;
+  state.gallery = 0;
   writeURL();
   const t = TINTS[p.category];
+  const imgs = imagesFor(p);
+  const multi = imgs.length > 1;
 
   const buys = p.retailers.map((r) => `<a class="buy" href="#" onclick="return false">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-1.5 9h-12z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 6 5 3H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="18" cy="20" r="1.5" fill="currentColor"/></svg>
@@ -762,13 +779,16 @@ function openModal(id) {
   els.modalInner.innerHTML = `
     <div class="modal-head">
       <button class="modal-close" id="mClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <div class="modal-art">
-        <img class="prod-img" src="${p.image}" alt="${p.brand} ${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-        <span class="art-fallback">${ART[p.category](t)}</span>
-        <div class="modal-nav">
-          <button class="spot-arrow" id="mPrev" aria-label="Previous product"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <button class="spot-arrow" id="mNext" aria-label="Next product"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="modal-gallery">
+        <div class="modal-art">
+          <img class="prod-img" id="galMain" src="${imgs[0]}" alt="${p.brand} ${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <span class="art-fallback">${ART[p.category](t)}</span>
+          ${multi ? `<div class="gal-arrows">
+            <button class="spot-arrow" id="galPrev" aria-label="Previous image"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="spot-arrow" id="galNext" aria-label="Next image"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>` : ""}
         </div>
+        ${multi ? `<div class="gal-thumbs" id="galThumbs">${imgs.map((src, idx) => `<button class="gal-thumb${idx === 0 ? " active" : ""}" data-gal="${idx}" aria-label="View image ${idx + 1}"><img src="${src}" alt="" decoding="async" onerror="this.style.display='none'"></button>`).join("")}</div>` : ""}
       </div>
       <div class="modal-intro">
         <span class="b">${p.brand} · ${catLabel(p.category)}</span>
@@ -831,8 +851,12 @@ function openModal(id) {
   els.modal.classList.add("open");
   document.body.style.overflow = "hidden";
   $("mClose").addEventListener("click", closeModal);
-  $("mPrev").addEventListener("click", () => navProduct(-1));
-  $("mNext").addEventListener("click", () => navProduct(1));
+  if (multi) {
+    $("galPrev").addEventListener("click", () => showGalleryImage(state.gallery - 1));
+    $("galNext").addEventListener("click", () => showGalleryImage(state.gallery + 1));
+    els.modalInner.querySelectorAll("[data-gal]").forEach((b) =>
+      b.addEventListener("click", () => showGalleryImage(+b.dataset.gal)));
+  }
   els.modalInner.querySelectorAll("[data-pair]").forEach((b) =>
     b.addEventListener("click", () => openModal(b.dataset.pair)));
   els.modal.scrollTop = 0;
@@ -842,15 +866,6 @@ function closeModal() {
   document.body.style.overflow = "";
   state.openItem = null;
   writeURL();
-}
-/* browse adjacent products within the current result set (or full catalogue) */
-function navProduct(dir) {
-  if (!state.openItem) return;
-  const filtered = getFiltered();
-  const nav = filtered.some((x) => x.id === state.openItem) ? filtered : PRODUCTS;
-  const i = nav.findIndex((x) => x.id === state.openItem);
-  if (i < 0) return;
-  openModal(nav[(i + dir + nav.length) % nav.length].id);
 }
 
 /* ============================================================
@@ -988,8 +1003,8 @@ document.addEventListener("keydown", (e) => {
     if ($("compareBack").classList.contains("open")) closeCompare();
     else if (els.modal.classList.contains("open")) closeModal();
   } else if (els.modal.classList.contains("open") && !$("compareBack").classList.contains("open")) {
-    if (e.key === "ArrowLeft") navProduct(-1);
-    else if (e.key === "ArrowRight") navProduct(1);
+    if (e.key === "ArrowLeft") showGalleryImage(state.gallery - 1);
+    else if (e.key === "ArrowRight") showGalleryImage(state.gallery + 1);
   }
 });
 
