@@ -762,9 +762,13 @@ function openModal(id) {
   els.modalInner.innerHTML = `
     <div class="modal-head">
       <button class="modal-close" id="mClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <div class="modal-art" style="background:${t.bg}">
+      <div class="modal-art">
         <img class="prod-img" src="${p.image}" alt="${p.brand} ${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
         <span class="art-fallback">${ART[p.category](t)}</span>
+        <div class="modal-nav">
+          <button class="spot-arrow" id="mPrev" aria-label="Previous product"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="spot-arrow" id="mNext" aria-label="Next product"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
       </div>
       <div class="modal-intro">
         <span class="b">${p.brand} · ${catLabel(p.category)}</span>
@@ -773,6 +777,10 @@ function openModal(id) {
         ${isTopPick(p)
           ? `<span class="modal-tag t-top">★ Top pick in ${catLabel(p.category)}</span>`
           : STRETCH.has(p.id) ? `<span class="modal-tag t-stretch">Stretch pick — aspirational</span>` : ""}
+        <div class="modal-hero-meta">
+          <span class="mh-rating">${stars(p.rating)}<span class="mh-rval">${p.rating.toFixed(1)}</span></span>
+          <span class="mh-price">${fmtPrice(p.price)}</span>
+        </div>
       </div>
     </div>
     <div class="modal-body">
@@ -823,6 +831,8 @@ function openModal(id) {
   els.modal.classList.add("open");
   document.body.style.overflow = "hidden";
   $("mClose").addEventListener("click", closeModal);
+  $("mPrev").addEventListener("click", () => navProduct(-1));
+  $("mNext").addEventListener("click", () => navProduct(1));
   els.modalInner.querySelectorAll("[data-pair]").forEach((b) =>
     b.addEventListener("click", () => openModal(b.dataset.pair)));
   els.modal.scrollTop = 0;
@@ -832,6 +842,15 @@ function closeModal() {
   document.body.style.overflow = "";
   state.openItem = null;
   writeURL();
+}
+/* browse adjacent products within the current result set (or full catalogue) */
+function navProduct(dir) {
+  if (!state.openItem) return;
+  const filtered = getFiltered();
+  const nav = filtered.some((x) => x.id === state.openItem) ? filtered : PRODUCTS;
+  const i = nav.findIndex((x) => x.id === state.openItem);
+  if (i < 0) return;
+  openModal(nav[(i + dir + nav.length) % nav.length].id);
 }
 
 /* ============================================================
@@ -968,6 +987,9 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     if ($("compareBack").classList.contains("open")) closeCompare();
     else if (els.modal.classList.contains("open")) closeModal();
+  } else if (els.modal.classList.contains("open") && !$("compareBack").classList.contains("open")) {
+    if (e.key === "ArrowLeft") navProduct(-1);
+    else if (e.key === "ArrowRight") navProduct(1);
   }
 });
 
