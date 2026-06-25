@@ -217,6 +217,9 @@ h1,h2,h3 { margin: 0; }
 }
 .facets.is-open .facet-toggle .ft-chev { display: block; margin-left: auto; transform: rotate(180deg); }
 
+/* compact search trigger — only shown on phones (see media query) */
+.search-toggle { display: none; }
+
 .facet-panel { margin-top: 4px; }
 .facet-panel .reset {
   display: block; margin: 14px 0 0 auto;
@@ -823,7 +826,22 @@ body.has-compare { padding-bottom: 74px; }
   .float-chip.chip-rating { right: 2px; }
   .float-chip.chip-price { left: 2px; }
   .toolbar { flex-wrap: wrap; }
-  .search { flex: 1 1 100%; order: -1; }
+  /* FILTER pill + compact search icon share one row */
+  .facets { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .facet-toggle, .facets.is-open .facet-toggle { align-self: center; }
+  .facet-panel { flex-basis: 100%; order: 3; }
+  .search-toggle {
+    display: inline-grid; place-items: center; margin-left: auto;
+    width: 46px; height: 46px; flex: none;
+    background: var(--card); border: 1px solid var(--line); border-radius: 100px;
+    color: var(--ink); box-shadow: var(--sh-1);
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .search-toggle:hover { border-color: var(--ink); }
+  .search-toggle.active { background: var(--ember); border-color: var(--ember); color: var(--feat-fg); }
+  /* search field collapses to the icon until opened */
+  .search { display: none; flex: 1 1 100%; order: -1; }
+  .catalog.search-on .search { display: block; }
   .view-toggle button .vt-label { display: none; }
   .view-toggle button { padding: 0 12px; }
   .score-ring { gap: 16px; }

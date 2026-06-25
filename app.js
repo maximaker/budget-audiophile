@@ -317,6 +317,7 @@ const els = {
   modal: $("modal"), modalInner: $("modalInner"), wavePath: $("wavePath"),
   catalog: document.querySelector(".catalog"), facets: $("facets"),
   facetToggle: $("facetToggle"), facetPanel: $("facetPanel"), facetBadge: $("facetBadge"),
+  searchToggle: $("searchToggle"),
   ciSub: document.querySelector(".ci-sub"),
   home: $("top"), systemsView: $("systemsView"),
 };
@@ -1076,6 +1077,17 @@ document.querySelectorAll(".view-toggle button").forEach((b) =>
   })
 );
 els.facetToggle.addEventListener("click", () => setFacetsOpen(!state.facetsOpen));
+function setSearchOpen(open) {
+  els.catalog.classList.toggle("search-on", open);
+  els.searchToggle.classList.toggle("active", open);
+  els.searchToggle.setAttribute("aria-expanded", String(open));
+  if (open) els.search.focus();
+}
+els.searchToggle.addEventListener("click", () => {
+  const open = !els.catalog.classList.contains("search-on");
+  if (!open && (state.q || els.search.value)) { state.q = ""; els.search.value = ""; render(); } // clear on collapse — no hidden filter
+  setSearchOpen(open);
+});
 $("themeToggle").addEventListener("click", () =>
   applyTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark"));
 document.addEventListener("keydown", (e) => {
