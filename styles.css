@@ -843,6 +843,12 @@ body.has-compare { padding-bottom: 74px; }
   .pairs { grid-template-columns: 1fr; }
   .systems-grid { grid-template-columns: 1fr; }
   .sc-grid { grid-template-columns: 1fr; }
+  /* give category labels room: more text width, smaller title, tighter image */
+  .sc-card { min-height: 168px; padding: 26px 24px; }
+  .sc-text { max-width: 62%; }
+  .sc-title { font-size: 1.55rem; margin-bottom: 7px; }
+  .sc-blurb { margin-bottom: 16px; }
+  .sc-img { width: 32%; height: 64%; right: 14px; }
   .sl-grid { grid-template-columns: 1fr; }
   .foot-in { grid-template-columns: 1fr; }
   .picks-grid { grid-template-columns: 1fr; }
